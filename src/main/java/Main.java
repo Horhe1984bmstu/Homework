@@ -4,24 +4,24 @@
   import org.openqa.selenium.WebElement;
   import org.openqa.selenium.chrome.ChromeDriver;
   import org.openqa.selenium.support.ui.Select;
-
   import java.util.List;
-  import java.util.concurrent.TimeUnit;
-  import java.util.concurrent.TimeoutException;
-
-  import static java.lang.System.*;
+  import static java.lang.System.setProperty;
 
   public class Main {
-    public static void main(String[] args) throws InterruptedException {
-      setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
 
+    public static void main(String[] args) throws InterruptedException {
+
+
+      setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
       WebDriver driver = new ChromeDriver();
       driver.manage().window().maximize();
       //driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
       driver.get("https://www.avito.ru/");
       //out.println(driver.getPageSource());
+
       Select categorySelector = new Select(driver.findElement(By.xpath("//select[@name='category_id']")));
       categorySelector.selectByVisibleText("Оргтехника и расходники");
+
       Thread.sleep(2000);
       driver.findElement(By.xpath("//input[@id='search']")).sendKeys("Принтер");
       Thread.sleep(2000);
@@ -34,11 +34,6 @@
       String V = driver.findElement(By.xpath("//label[@data-marker='delivery-filter']")).getAttribute("class");
       System.out.println(V);
       Thread.sleep(2000);
-
-      //Если делать драйвером, то на чекбоксе с доставкой выводит исключение - не кликабельно.
-      //driver.findElement(By.xpath("//input[@data-marker='delivery-filter/input']")).click();
-      //ElementClickInterceptedException: element click intercepted: Element <input class="checkbox-input-3KD6i"
-      //Пришлось экзекутором принудить
 
       if (!(V.contains("checked"))) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -54,9 +49,15 @@
 
       driver.findElement(By.xpath("//button[@data-marker='search-filters/submit-button']")).click();
       Thread.sleep(2000);
-      driver.findElement(By.xpath("//div[@class='form-select-v2 sort-select-3QxXG']/select")).click();
-      Thread.sleep(2000);
-      driver.findElement(By.xpath("//div[@class='form-select-v2 sort-select-3QxXG']/select/option[3]")).click();
+      //driver.findElement(By.xpath("//div[@class='form-select-v2 sort-select-3QxXG']/select")).click();
+      driver.findElement(By.xpath("//div[@class='sort-select-3QxXG select-select-box-3LBfK select-size-s-2gvAy']/select")).click();
+      Thread.sleep(4000);
+      //driver.findElement(By.xpath("//div[@class='form-select-v2 sort-select-3QxXG']/select/option[3]")).click();
+      driver.findElement(By.xpath("//div[@class='sort-select-3QxXG select-select-box-3LBfK select-size-s-2gvAy']/select/option[3]")).click();
+
+      Select categorySelector_2 = new Select(driver.findElement(By.xpath("//div[@class='sort-select-3QxXG select-select-box-3LBfK select-size-s-2gvAy']/select")));
+      categorySelector_2.selectByVisibleText("Дороже");
+
 
 //Далее в теории должны быть такие варианты, но у меня в браузере они не работают
 //div[@id='i2008889556']/descendant::span[text()=’name’]
@@ -71,10 +72,6 @@
 //System.out.println(driver.findElement(By.xpath("//div[@id='i2008889556']/descendant::span[text()=’name’]")).getText());
 //System.out.println(driver.findElement(By.xpath("//div[@id='i2008889556']/descendant::span[text()=’item-price’]")).getText());
 
-//Можно еще такие использовать, но это кривота:
-//a[@class='snippet-link'][1]/span
-//и почему-то первый элемент находит ,
-//а a[@class='snippet-link'][2], a[@class='snippet-link'][3] нет
 
 //div[@id='i2020561662']
 //div[@id='i1946935781']
@@ -82,6 +79,7 @@
 
 
       }
-    }
-  }
 
+    }
+
+  }
